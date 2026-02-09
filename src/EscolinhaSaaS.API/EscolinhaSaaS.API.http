@@ -1,0 +1,6 @@
+@EscolinhaSaaS.API_HostAddress = http://localhost:5114
+
+GET {{EscolinhaSaaS.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

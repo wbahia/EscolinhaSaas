@@ -1,0 +1,9 @@
+# .gitignore
+[Bb]in/
+[Oo]bj/
+.vs/
+.vscode/
+*.user
+*.suo
+appsettings.Development.json
+scripts/postgres_data/
