@@ -23,8 +23,7 @@ public class TenantSchemaInterceptor : DbConnectionInterceptor
             var schemaName = $"escolinha_{_tenantService.TenantId.Value:n}";
             
             using var command = connection.CreateCommand();
-            // Adicionei o comando para garantir que não haja confusão com Case Sensitivity
-            command.CommandText = $"SET search_path TO \"{schemaName}\", public;";
+            command.CommandText = $"SET search_path TO {schemaName}, public;";
             await command.ExecuteNonQueryAsync(cancellationToken);
         }
 

@@ -17,7 +17,6 @@ namespace EscolinhaSaaS.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("public")
                 .HasAnnotation("ProductVersion", "8.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -27,59 +26,72 @@ namespace EscolinhaSaaS.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("ativo");
 
                     b.Property<DateTime>("DataNascimento")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("data_nascimento");
 
                     b.Property<string>("Matricula")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("matricula");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text")
+                        .HasColumnName("nome");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("tenant_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_alunos");
 
-                    b.ToTable("Alunos", "public");
+                    b.ToTable("alunos", (string)null);
                 });
 
             modelBuilder.Entity("EscolinhaSaaS.Domain.Entities.Plano", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("ativo");
 
                     b.Property<string>("FeaturesJson")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("features_json");
 
                     b.Property<int>("MaxAlunos")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("max_alunos");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("nome");
 
                     b.Property<decimal>("Preco")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("preco");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_planos");
 
-                    b.ToTable("Planos", "public");
+                    b.ToTable("planos", "public");
 
                     b.HasData(
                         new
@@ -115,90 +127,115 @@ namespace EscolinhaSaaS.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("ativo");
 
                     b.Property<string>("Cnpj")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("cnpj");
 
                     b.Property<string>("CorPrimaria")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("cor_primaria");
 
                     b.Property<string>("CorSecundaria")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("cor_secundaria");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("LogoUrl")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("logo_url");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("nome");
 
                     b.Property<int>("PlanoId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("plano_id");
 
                     b.Property<string>("Subdomain")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("subdomain");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_tenants");
 
-                    b.HasIndex("PlanoId");
+                    b.HasIndex("PlanoId")
+                        .HasDatabaseName("ix_tenants_plano_id");
 
                     b.HasIndex("Subdomain")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_tenants_subdomain");
 
-                    b.ToTable("Tenants", "public");
+                    b.ToTable("tenants", "public");
                 });
 
             modelBuilder.Entity("EscolinhaSaaS.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("ativo");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("email");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("nome");
 
                     b.Property<int>("Role")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("role");
 
                     b.Property<string>("SenhaHash")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("senha_hash");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("tenant_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_users");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_email");
 
-                    b.HasIndex("TenantId");
+                    b.HasIndex("TenantId")
+                        .HasDatabaseName("ix_users_tenant_id");
 
-                    b.ToTable("Users", "public");
+                    b.ToTable("users", "public");
                 });
 
             modelBuilder.Entity("EscolinhaSaaS.Domain.Entities.Tenant", b =>
@@ -207,7 +244,8 @@ namespace EscolinhaSaaS.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("PlanoId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_tenants_planos_plano_id");
 
                     b.Navigation("Plano");
                 });
@@ -218,7 +256,8 @@ namespace EscolinhaSaaS.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_users_tenants_tenant_id");
 
                     b.Navigation("Tenant");
                 });

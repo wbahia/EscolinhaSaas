@@ -1,6 +1,7 @@
 using EscolinhaSaaS.Application.DTOs;
 using EscolinhaSaaS.Domain.Entities;
 using EscolinhaSaaS.Infrastructure.Context;
+using EscolinhaSaaS.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace EscolinhaSaaS.Application.Services;
@@ -9,11 +10,13 @@ public class AuthService
 {
     private readonly TenantDbContext _context;
     private readonly TokenService _tokenService;
+    private readonly TenantDatabaseService _dbService;
 
-    public AuthService(TenantDbContext context, TokenService tokenService)
+    public AuthService(TenantDbContext context, TokenService tokenService, TenantDatabaseService dbService)
     {
         _context = context;
         _tokenService = tokenService;
+        _dbService = dbService;
     }
 
     public async Task<Guid> RegisterEscolinhaAsync(RegisterRequest request)
@@ -46,6 +49,8 @@ public class AuthService
 
             // Chama a função SQL de criação de schema do PostgreSQL
             await _context.Database.ExecuteSqlRawAsync("SELECT public.create_tenant_schema({0})", tenant.Id);
+
+            await _dbService.CreateTenantStructureAsync(tenant.Id);
 
             await transaction.CommitAsync();
             return tenant.Id;

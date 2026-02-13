@@ -22,20 +22,18 @@ public class TenantDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         modelBuilder.Entity<Tenant>(entity => {
-            entity.ToTable("Tenants", "public"); // Esquema fixo
+            entity.ToTable("tenants", "public"); 
             entity.HasIndex(e => e.Subdomain).IsUnique();
-            entity.Property(e => e.Subdomain).IsRequired();
         });
 
         modelBuilder.Entity<User>(entity => {
-            entity.ToTable("Users", "public"); // Esquema fixo
+            entity.ToTable("users", "public");
             entity.HasIndex(e => e.Email).IsUnique();
         });
 
         modelBuilder.Entity<Plano>(entity => {
-            entity.ToTable("Planos", "public"); // Esquema fixo
+            entity.ToTable("planos", "public");
             entity.HasData(
                 new Plano { Id = 1, Nome = "Básico", Preco = 0 },
                 new Plano { Id = 2, Nome = "Profissional", Preco = 99.90m },
@@ -46,17 +44,10 @@ public class TenantDbContext : DbContext
         modelBuilder.Entity<Aluno>(entity => {
             entity.ToTable("alunos"); 
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Nome).HasColumnName("nome");
-            entity.Property(e => e.Matricula).HasColumnName("matricula");
-            entity.Property(e => e.DataNascimento).HasColumnName("datanascimento");
-            entity.Property(e => e.Ativo).HasColumnName("ativo");
-            entity.Property(e => e.TenantId).HasColumnName("tenantid");
-            
             entity.Metadata.SetIsTableExcludedFromMigrations(true);
+            entity.Property(e => e.DataNascimento).HasColumnName("data_nascimento");
+            entity.Property(e => e.TenantId).HasColumnName("tenant_id");
         });
-
-        base.OnModelCreating(modelBuilder);
     }
 
 }

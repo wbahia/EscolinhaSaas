@@ -78,6 +78,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddScoped<TenantDatabaseService>();
+
 var app = builder.Build();
 
 app.UseSwagger();
