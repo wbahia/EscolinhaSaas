@@ -12,7 +12,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Configuração do DbContext
+// 1. Configuração do DbContext Principal
 builder.Services.AddScoped<TenantSchemaInterceptor>();
 builder.Services.AddDbContext<TenantDbContext>((sp, options) =>
 {
@@ -22,12 +22,21 @@ builder.Services.AddDbContext<TenantDbContext>((sp, options) =>
         .AddInterceptors(interceptor); 
 });
 
-// 2. Registro dos serviços
+// 2. Configuração do DbContext do Schema do Tenant (usado apenas para gerar SQL)
+// Não precisa do interceptor pois é usado apenas em design-time
+builder.Services.AddDbContext<TenantSchemaDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+        .UseSnakeCaseNamingConvention();
+});
+
+// 3. Registro dos serviços
 builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<TenantDatabaseService>();
 
-// 3. Configuração do JWT
+// 4. Configuração do JWT
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]!);
 builder.Services.AddAuthentication(x => {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -51,7 +60,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Escolinha SaaS API", Version = "v1" });
 
-    // 1. Define o esquema de segurança (Bearer Token)
+    // Define o esquema de segurança (Bearer Token)
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header usando o esquema Bearer. Exemplo: \"Bearer {token}\"",
@@ -61,7 +70,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer"
     });
 
-    // 2. Aplica a segurança globalmente no Swagger
+    // Aplica a segurança globalmente no Swagger
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -77,8 +86,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
-builder.Services.AddScoped<TenantDatabaseService>();
 
 var app = builder.Build();
 

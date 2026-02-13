@@ -18,22 +18,6 @@ namespace EscolinhaSaaS.Infrastructure.Migrations
                 name: "public");
 
             migrationBuilder.CreateTable(
-                name: "alunos",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    nome = table.Column<string>(type: "text", nullable: false),
-                    data_nascimento = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    matricula = table.Column<string>(type: "text", nullable: false),
-                    ativo = table.Column<bool>(type: "boolean", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_alunos", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "planos",
                 schema: "public",
                 columns: table => new
@@ -147,9 +131,6 @@ namespace EscolinhaSaaS.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "alunos");
-
             migrationBuilder.DropTable(
                 name: "users",
                 schema: "public");

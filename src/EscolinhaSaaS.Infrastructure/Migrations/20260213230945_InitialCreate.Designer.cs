@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EscolinhaSaaS.Infrastructure.Migrations
 {
     [DbContext(typeof(TenantDbContext))]
-    [Migration("20260213205416_InitialCreate")]
+    [Migration("20260213230945_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,7 +33,9 @@ namespace EscolinhaSaaS.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("ativo");
 
                     b.Property<DateTime>("DataNascimento")
@@ -57,7 +59,13 @@ namespace EscolinhaSaaS.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_alunos");
 
-                    b.ToTable("alunos", (string)null);
+                    b.HasIndex("TenantId")
+                        .HasDatabaseName("ix_alunos_tenant_id");
+
+                    b.ToTable("alunos", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("EscolinhaSaaS.Domain.Entities.Plano", b =>

@@ -21,7 +21,7 @@ public class AlunosController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(Aluno aluno)
     {
-        var schemaAtual = await _context.Database.ExecuteSqlRawAsync("SHOW search_path");
+        // O TenantId será preenchido automaticamente pelo SaveChanges
         _context.Alunos.Add(aluno);
         await _context.SaveChangesAsync();
         return Ok(aluno);
@@ -47,7 +47,7 @@ public class AlunosController : ControllerBase
     {
         if (id != aluno.Id) return BadRequest();
 
-        // Garante que o TenantId não mude acidentalmente
+        // O TenantId será protegido automaticamente (não permite alteração)
         _context.Entry(aluno).State = EntityState.Modified;
 
         try
@@ -74,5 +74,4 @@ public class AlunosController : ControllerBase
 
         return NoContent();
     }
-
 }
